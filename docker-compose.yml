@@ -7,7 +7,7 @@ services:
     depends_on:
       - db
     volumes:
-      - ./server:/usr/src/app
+      - ./server:/usr/src/app_server
       - /usr/app/node_modules
     restart: always
     ports:
@@ -34,7 +34,7 @@ services:
     build:
       context: ./client
     volumes:
-      - ./client:/usr/src/app
+      - ./client:/usr/src/app_client
       - /usr/src/app/node_modules
     restart: always
     ports:
