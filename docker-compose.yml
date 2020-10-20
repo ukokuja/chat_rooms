@@ -1,0 +1,41 @@
+version: "3"
+services:
+  server_a: &server_a
+    container_name: server_a
+    build:
+        context: ./server
+    depends_on:
+      - db
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/app/node_modules
+    restart: always
+    ports:
+      - '8083:8080'
+    environment:
+    - HOST=host.docker.internal
+    - PORT=6379
+
+  server_b:
+    <<: *server_a
+    container_name: server_b
+    ports:
+      - '8085:8080'
+
+  db:
+    container_name: db
+    image: "redis:alpine"
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+    - '6379:6379'
+
+  client:
+    container_name: client
+    build:
+      context: ./client
+    volumes:
+      - ./client:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: always
+    ports:
+      - '8084:8080'
